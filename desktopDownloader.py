@@ -61,7 +61,7 @@ while True:
                         break   # Stop checking if it has already been downloaded
                 if not duplicate:    # The file in the URL has NOT already been downloaded
                     print('Downloading ' + submission.id + '...')
-                    urllib.request.urlretrieve(submission.url, DESKTOP_DIR + submission.id)
+                    urllib.request.urlretrieve(submission.url, DESKTOP_DIR + submission.id + '.png')
             else:
                 print('This is not a direct link')
         else:
