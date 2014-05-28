@@ -56,12 +56,12 @@ while True:
             if '.' in submission.url.split('/')[-1]:    # SUPER lazy test to check if it is a direct link to an image
                 duplicate = False   # Once again, because I am lazy
                 for name in downloaded_pics:
-                    if (name == submission.id): # Check the names of the downloaded files against the current one
+                    if (name == submission.id + '.jpeg'): # Check the names of the downloaded files against the current one
                         duplicate = True    # This is lazy af
                         break   # Stop checking if it has already been downloaded
                 if not duplicate:    # The file in the URL has NOT already been downloaded
                     print('Downloading ' + submission.id + '...')
-                    urllib.request.urlretrieve(submission.url, DESKTOP_DIR + submission.id + '.png')
+                    urllib.request.urlretrieve(submission.url, DESKTOP_DIR + submission.id + '.jpeg')
             else:
                 print('This is not a direct link')
         else:
