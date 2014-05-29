@@ -34,7 +34,7 @@ r = praw.Reddit(user_agent=user_agent)
 
 MIN_RES_X = 2000
 MIN_RES_Y = 2000
-SLEEP_TIME = 1800   # Time between refreshes in seconds
+SLEEP_TIME = 21600   # Time between refreshes in seconds
 SUBREDDIT = 'earthporn'    # Change this depending on your personal fetish
 DESKTOP_DIR = 'C:\\Users\\You\\Pictures\\Earthporn\\'    # Change this depending on your setup, but keep the trailing slash
 POST_LIMIT = 50     # The number of posts to analyse at a time
