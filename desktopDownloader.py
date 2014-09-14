@@ -34,37 +34,37 @@ r = praw.Reddit(user_agent=user_agent)
 
 MIN_RES_X = 2000
 MIN_RES_Y = 2000
-SLEEP_TIME = 21600   # Time between refreshes in seconds
+SLEEP_TIME = 1800   # Time between refreshes in seconds
 SUBREDDIT = 'earthporn'    # Change this depending on your personal fetish
-DESKTOP_DIR = 'C:\\Users\\You\\Pictures\\Earthporn\\'    # Change this depending on your setup, but keep the trailing slash
+DESKTOP_DIR = 'C:\\Users\\jacob\\Pictures\\Earthporn\\'    # Change this depending on your setup, but keep the trailing slash
 POST_LIMIT = 50     # The number of posts to analyse at a time
 
-while True:
-    subreddit = r.get_subreddit(SUBREDDIT)    # Refresh the subreddit
-    downloaded_pics = os.listdir(DESKTOP_DIR) # Load the files in the directory only once per main loop
-    
-    # Cycle through each recent post and create a list of possible desktop candidates
-    for submission in subreddit.get_hot(limit=POST_LIMIT):
-        print(submission.title)
-        match = re.search('\[([,\d]+)\s*x\s*([,\d]+)\]', submission.title)    # Check for the resolution
-        if (match == None): # A quick check to make sure the post is a picture
-            print('No matches')
-            continue
-        res_x = int(match.groups()[0].replace(',',''))    # The x of the pic w/o commas
-        res_y = int(match.groups()[1].replace(',',''))    # The y of the pic w/o commas
-        if (res_x >= MIN_RES_X and res_y >= MIN_RES_Y):
-            if '.' in submission.url.split('/')[-1]:    # SUPER lazy test to check if it is a direct link to an image
-                duplicate = False   # Once again, because I am lazy
-                for name in downloaded_pics:
-                    if (name == submission.id + '.jpeg'): # Check the names of the downloaded files against the current one
-                        duplicate = True    # This is lazy af
-                        break   # Stop checking if it has already been downloaded
-                if not duplicate:    # The file in the URL has NOT already been downloaded
-                    print('Downloading ' + submission.id + '...')
-                    urllib.request.urlretrieve(submission.url, DESKTOP_DIR + submission.id + '.jpeg')
-            else:
-                print('This is not a direct link')
+subreddit = r.get_subreddit(SUBREDDIT)    # Refresh the subreddit
+downloaded_pics = os.listdir(DESKTOP_DIR) # Load the files in the directory only once per main loop
+downloaded_count = 0 # A count of the number of pics downloaded
+   
+# Cycle through each recent post and create a list of possible desktop candidates
+for submission in subreddit.get_hot(limit=POST_LIMIT):
+    print(submission.title)
+    match = re.search('\[([,\d]+)\s*x\s*([,\d]+)\]', submission.title)    # Check for the resolution
+    if (match == None): # A quick check to make sure the post is a picture
+        print('No matches')
+        continue
+    res_x = int(match.groups()[0].replace(',',''))    # The x of the pic w/o commas
+    res_y = int(match.groups()[1].replace(',',''))    # The y of the pic w/o commas
+    if (res_x >= MIN_RES_X and res_y >= MIN_RES_Y):
+        if '.' in submission.url.split('/')[-1]:    # SUPER lazy test to check if it is a direct link to an image
+            duplicate = False   # Once again, because I am lazy
+            for name in downloaded_pics:
+                if (name == submission.id): # Check the names of the downloaded files against the current one
+                    duplicate = True    # This is lazy af
+                    break   # Stop checking if it has already been downloaded
+            if not duplicate:    # The file in the URL has NOT already been downloaded
+                print('Downloading ' + submission.id + '...')
+                urllib.request.urlretrieve(submission.url, DESKTOP_DIR + submission.id + '.jpeg')
+                downloaded_count = downloaded_count + 1;
         else:
-            print('Too small')
-    print('Sleeping...')
-    time.sleep(SLEEP_TIME)
+            print('This is not a direct link')
+    else:
+        print('Too small')
+print('A total of {0} pics were downloaded'.format(downloaded_count))
