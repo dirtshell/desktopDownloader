@@ -27,6 +27,9 @@
 # *  Does not detect the image type and simply saves it as a 
 #    PNG, so that there is compatibility with Windows =/. No
 #    noticeable difference though afaik.
+# *  Rather than use the id of the post, SHA1 the file and use that
+#    as the file name
+# *  Allow for interoperability between Python 2 and 3
 
 from PIL import ImageFile
 import praw
